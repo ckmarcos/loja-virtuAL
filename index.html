@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModaStyle - Loja Virtual</title>
+    <style>
+        /* Estilos Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Cabeçalho */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        nav {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: #34495e;
+        }
+        
+        /* Container Principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        /* Páginas */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Formulários */
+        .form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-secondary {
+            background-color: #3498db;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Produtos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 1rem;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        
+        .product-old-price {
+            text-decoration: line-through;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        .promo-badge {
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+        
+        /* Mensagens */
+        .message {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav {
+                margin-top: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="logo">ModaStyle</div>
+        <nav>
+            <a href="#" class="nav-link active" data-page="home">Início</a>
+            <a href="#" class="nav-link" data-page="promotions">Promoções</a>
+            <a href="#" class="nav-link" data-page="seller" id="seller-link">Área do Vendedor</a>
+            <a href="#" class="nav-link" data-page="login" id="auth-link">Login</a>
+        </nav>
+    </header>
+    
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <!-- Página Inicial -->
+        <div id="home" class="page active">
+            <h1>Bem-vindo à ModaStyle</h1>
+            <p>Confira nossos produtos em destaque</p>
+            
+            <div class="products-grid" id="featured-products">
+                <div class="loading">Carregando produtos...</div>
+            </div>
+        </div>
+        
+        <!-- Página de Promoções -->
+        <div id="promotions" class="page">
+            <h1>Promoções Especiais</h1>
+            <p>Aproveite nossas ofertas por tempo limitado</p>
+            
+            <div class="products-grid" id="promo-products">
+                <div class="loading">Carregando promoções...</div>
+            </div>
+        </div>
+        
+        <!-- Área do Vendedor -->
+        <div id="seller" class="page">
+            <div id="seller-content">
+                <!-- Conteúdo será carregado dinamicamente -->
+            </div>
+        </div>
+        
+        <!-- Página de Login/Cadastro -->
+        <div id="login" class="page">
+            <div class="form-container">
+                <h2>Área de Acesso</h2>
+                <div id="auth-message"></div>
+                
+                <div id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button class="btn" onclick="login()">Entrar</button>
+                    <button class="btn btn-secondary" onclick="showRegisterForm()">Criar conta</button>
+                </div>
+                
+                <div id="register-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Senha (mínimo 6 caracteres)</label>
+                        <input type="password" id="register-password" minlength="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm">Confirme a senha</label>
+                        <input type="password" id="register-confirm" required>
+                    </div>
+                    <button class="btn" onclick="register()">Cadastrar</button>
+                    <button class="btn btn-secondary" onclick="showLoginForm()">Voltar para login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfvKZibA80hBEFkxQWeTq0Uq9ikEnWSZY",
+            authDomain: "loja-virtual-e1d29.firebaseapp.com",
+            projectId: "loja-virtual-e1d29",
+            storageBucket: "loja-virtual-e1d29.appspot.com",
+            messagingSenderId: "927903692687",
+            appId: "1:927903692687:web:5d9cb69e38af17d3c2fdfa",
+            measurementId: "G-1XSGQHDENW"
+        };
+
+        // Inicialização do Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Variáveis globais
+        let currentUser = null;
+
+        // Observador de estado de autenticação
+        auth.onAuthStateChanged(user => {
+            currentUser = user;
+            updateUI();
+            
+            if (user) {
+                if (window.location.hash === '#seller') {
+                    loadSellerArea();
+                }
+            } else {
+                document.getElementById('seller-content').innerHTML = '';
+            }
+        });
+
+        // Atualiza a UI com base no estado de login
+        function updateUI() {
+            const authLink = document.getElementById('auth-link');
+            const sellerLink = document.getElementById('seller-link');
+            
+            if (currentUser) {
+                authLink.textContent = 'Sair';
+                authLink.setAttribute('onclick', 'logout()');
+                sellerLink.style.display = 'block';
+            } else {
+                authLink.textContent = 'Login';
+                authLink.setAttribute('onclick', 'showPage("login")');
+                sellerLink.style.display = 'none';
+            }
+        }
+
+        // Navegação entre páginas
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+            window.location.hash = pageId;
+            
+            // Carrega conteúdo específico da página
+            if (pageId === 'home') loadFeaturedProducts();
+            if (pageId === 'promotions') loadPromoProducts();
+            if (pageId === 'seller' && currentUser) loadSellerArea();
+        }
+
+        // Carrega produtos em destaque
+        async function loadFeaturedProducts() {
+            const container = document.getElementById('featured-products');
+            container.innerHTML = '<div class="loading">Carregando produtos...</div>';
+            
+            try {
+                const snapshot = await db.collection('products')
+                    .where('featured', '==', true)
+                    .limit(4)
+                    .get();
+                
+                container.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p>Nenhum produto em destaque encontrado.</p>';
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    renderProductCard(doc.data(), doc.id, container);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar produtos:", error);
+                container.innerHTML = '<p class="error">Erro ao carregar produtos.</p>';
+            }
+        }
+
+        // Carrega produtos em promoção
+        async function loadPromoProducts() {
+            const container = document.getElementById('promo-products');
+            container.innerHTML = '<div class="loading">Carregando promoções...</div>';
+            
+            try {
+                const snapshot = await db.collection('products')
+                    .where('onSale', '==', true)
+                    .get();
+                
+                container.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p>Nenhuma promoção disponível no momento.</p>';
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    renderProductCard(doc.data(), doc.id, container);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar promoções:", error);
+                container.innerHTML = '<p class="error">Erro ao carregar promoções.</p>';
+            }
+        }
+
+        // Renderiza um card de produto
+        function renderProductCard(product, id, container) {
+            const discount = product.oldPrice ? 
+                Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : 0;
+            
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" class="product-image">
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <div>
+                        <span class="product-price">R$ ${product.price.toFixed(2)}</span>
+                        ${product.oldPrice ? `
+                            <span class="product-old-price">R$ ${product.oldPrice.toFixed(2)}</span>
+                            <span class="promo-badge">-${discount}%</span>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            container.appendChild(productCard);
+        }
+
+        // Carrega a área do vendedor
+        function loadSellerArea() {
+            const container = document.getElementById('seller-content');
+            container.innerHTML = `
+                <h1>Área do Vendedor</h1>
+                <div class="tabs">
+                    <button class="btn" onclick="showSellerTab('add-product')">Adicionar Produto</button>
+                    <button class="btn" onclick="showSellerTab('manage-promo')">Gerenciar Promoções</button>
+                    <button class="btn" onclick="showSellerTab('my-products')">Meus Produtos</button>
+                </div>
+                <div id="seller-tab-content">
+                    <!-- Conteúdo será carregado aqui -->
+                </div>
+            `;
+            
+            showSellerTab('add-product');
+        }
+
+        // Mostra uma aba específica na área do vendedor
+        function showSellerTab(tabId) {
+            const container = document.getElementById('seller-tab-content');
+            
+            if (tabId === 'add-product') {
+                container.innerHTML = `
+                    <h2>Adicionar Novo Produto</h2>
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="product-name">Nome do Produto</label>
+                            <input type="text" id="product-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-description">Descrição</label>
+                            <textarea id="product-description" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-price">Preço (R$)</label>
+                            <input type="number" id="product-price" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-category">Categoria</label>
+                            <select id="product-category" required>
+                                <option value="camisetas">Camisetas</option>
+                                <option value="calcas">Calças</option>
+                                <option value="vestidos">Vestidos</option>
+                                <option value="casacos">Casacos</option>
+                                <option value="acessorios">Acessórios</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-image">URL da Imagem</label>
+                            <input type="url" id="product-image" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="product-featured"> Produto em destaque
+                            </label>
+                        </div>
+                        <button class="btn" onclick="addProduct()">Salvar Produto</button>
+                    </div>
+                `;
+            } else if (tabId === 'manage-promo') {
+                container.innerHTML = `
+                    <h2>Gerenciar Promoções</h2>
+                    <div id="promo-products-list" class="products-grid">
+                        <div class="loading">Carregando produtos...</div>
+                    </div>
+                `;
+                loadProductsForPromo();
+            } else if (tabId === 'my-products') {
+                container.innerHTML = `
+                    <h2>Meus Produtos</h2>
+                    <div id="my-products-list" class="products-grid">
+                        <div class="loading">Carregando seus produtos...</div>
+                    </div>
+                `;
+                loadMyProducts();
+            }
+        }
+
+        // Adiciona um novo produto
+        async function addProduct() {
+            const name = document.getElementById('product-name').value;
+            const description = document.getElementById('product-description').value;
+            const price = parseFloat(document.getElementById('product-price').value);
+            const category = document.getElementById('product-category').value;
+            const image = document.getElementById('product-image').value;
+            const featured = document.getElementById('product-featured').checked;
+            
+            if (!name || !description || !price || !category || !image) {
+                showMessage('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            try {
+                await db.collection('products').add({
+                    name,
+                    description,
+                    price,
+                    category,
+                    image,
+                    featured,
+                    seller: currentUser.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    onSale: false
+                });
+                
+                showMessage('Produto adicionado com sucesso!', 'success');
+                document.getElementById('product-form').reset();
+            } catch (error) {
+                console.error("Erro ao adicionar produto:", error);
+                showMessage('Erro ao adicionar produto', 'error');
+            }
+        }
+
+        // Carrega produtos para gerenciar promoções
+        async function loadProductsForPromo() {
+            const container = document.getElementById('promo-products-list');
+            container.innerHTML = '<div class="loading">Carregando produtos...</div>';
+            
+            try {
+                const snapshot = await db.collection('products')
+                    .where('seller', '==', currentUser.uid)
+                    .get();
+                
+                container.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p>Você ainda não tem produtos cadastrados.</p>';
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    const product = doc.data();
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <p>R$ ${product.price.toFixed(2)}</p>
+                            ${product.onSale ? `
+                                <p class="success">Este produto está em promoção</p>
+                                <button class="btn" onclick="removeFromPromo('${doc.id}')">Remover da promoção</button>
+                            ` : `
+                                <div class="form-group">
+                                    <label for="old-price-${doc.id}">Preço antigo para promoção</label>
+                                    <input type="number" id="old-price-${doc.id}" step="0.01">
+                                </div>
+                                <button class="btn" onclick="addToPromo('${doc.id}')">Colocar em promoção</button>
+                            `}
+                        </div>
+                    `;
+                    container.appendChild(productCard);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar produtos:", error);
+                container.innerHTML = '<p class="error">Erro ao carregar produtos.</p>';
+            }
+        }
+
+        // Adiciona um produto à promoção
+        async function addToPromo(productId) {
+            const oldPrice = parseFloat(document.getElementById(`old-price-${productId}`).value);
+            
+            if (!oldPrice || oldPrice <= 0) {
+                showMessage('Informe um preço antigo válido', 'error');
+                return;
+            }
+            
+            try {
+                await db.collection('products').doc(productId).update({
+                    onSale: true,
+                    oldPrice: oldPrice
+                });
+                
+                showMessage('Produto adicionado à promoção!', 'success');
+                loadProductsForPromo();
+            } catch (error) {
+                console.error("Erro ao adicionar à promoção:", error);
+                showMessage('Erro ao adicionar à promoção', 'error');
+            }
+        }
+
+        // Remove um produto da promoção
+        async function removeFromPromo(productId) {
+            try {
+                await db.collection('products').doc(productId).update({
+                    onSale: false,
+                    oldPrice: null
+                });
+                
+                showMessage('Produto removido da promoção!', 'success');
+                loadProductsForPromo();
+            } catch (error) {
+                console.error("Erro ao remover da promoção:", error);
+                showMessage('Erro ao remover da promoção', 'error');
+            }
+        }
+
+        // Carrega os produtos do vendedor
+        async function loadMyProducts() {
+            const container = document.getElementById('my-products-list');
+            container.innerHTML = '<div class="loading">Carregando seus produtos...</div>';
+            
+            try {
+                const snapshot = await db.collection('products')
+                    .where('seller', '==', currentUser.uid)
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                container.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p>Você ainda não tem produtos cadastrados.</p>';
+                    return;
+                }
+                
+                snapshot.forEach(doc => {
+                    const product = doc.data();
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                            <p>R$ ${product.price.toFixed(2)}</p>
+                            <p>Categoria: ${product.category}</p>
+                            <button class="btn" onclick="editProduct('${doc.id}')">Editar</button>
+                            <button class="btn btn-secondary" onclick="deleteProduct('${doc.id}')">Excluir</button>
+                        </div>
+                    `;
+                    container.appendChild(productCard);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar produtos:", error);
+                container.innerHTML = '<p class="error">Erro ao carregar seus produtos.</p>';
+            }
+        }
+
+        // Funções de autenticação
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('auth-message').innerHTML = '';
+        }
+
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+            document.getElementById('auth-message').innerHTML = '';
+        }
+
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                showAuthMessage('Preencha todos os campos', 'error');
+                return;
+            }
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showPage('home');
+            } catch (error) {
+                console.error("Erro no login:", error);
+                showAuthMessage(getAuthErrorMessage(error.code), 'error');
+            }
+        }
+
+        async function register() {
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+            
+            if (!email || !password || !confirm) {
+                showAuthMessage('Preencha todos os campos', 'error');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showAuthMessage('As senhas não coincidem', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAuthMessage('A senha deve ter pelo menos 6 caracteres', 'error');
+                return;
+            }
+            
+            try {
+                await auth.createUserWithEmailAndPassword(email, password);
+                showAuthMessage('Conta criada com sucesso!', 'success');
+                showLoginForm();
+            } catch (error) {
+                console.error("Erro no cadastro:", error);
+                showAuthMessage(getAuthErrorMessage(error.code), 'error');
+            }
+        }
+
+        function logout() {
+            auth.signOut();
+            showPage('home');
+        }
+
+        // Funções auxiliares
+        function showMessage(text, type) {
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            document.getElementById('seller-content').prepend(message);
+            
+            setTimeout(() => {
+                message.remove();
+            }, 5000);
+        }
+
+        function showAuthMessage(text, type) {
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            document.getElementById('auth-message').innerHTML = '';
+            document.getElementById('auth-message').appendChild(message);
+        }
+
+        function getAuthErrorMessage(code) {
+            const messages = {
+                'auth/invalid-email': 'Email inválido',
+                'auth/user-disabled': 'Conta desativada',
+                'auth/user-not-found': 'Usuário não encontrado',
+                'auth/wrong-password': 'Senha incorreta',
+                'auth/email-already-in-use': 'Email já está em uso',
+                'auth/weak-password': 'Senha muito fraca (mínimo 6 caracteres)'
+            };
+            return messages[code] || 'Erro desconhecido';
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            // Configura navegação
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(link.getAttribute('data-page'));
+                });
+            });
+            
+            // Verifica hash na URL
+            if (window.location.hash) {
+                const page = window.location.hash.substring(1);
+                if (['home', 'promotions', 'seller', 'login'].includes(page)) {
+                    showPage(page);
+                }
+            }
+            
+            // Carrega produtos iniciais
+            loadFeaturedProducts();
+        });
+    </script>
+</body>
+</html>
